@@ -1,1 +1,514 @@
-# Hoje-o-dia-e-seu
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>¡Feliz Cumpleaños, Mi Amor! ❤️</title>
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #060713;
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* CANVAS BACKGROUND */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* OTHER WORLD MOON */
+        .moon-container {
+            position: fixed;
+            top: 20px;
+            right: 5%;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #cbd5e1 60%, #94a3b8 100%);
+            box-shadow: 0 0 25px rgba(255, 253, 240, 0.45),
+                        0 0 50px rgba(250, 204, 21, 0.25);
+            z-index: 1;
+            animation: moonGlow 5s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        /* SILHOUETTE AT BOTTOM */
+        .forest-silhouette {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: radial-gradient(ellipse at bottom, rgba(15, 23, 42, 0.8) 0%, transparent 85%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* CONTAINER STRUCTURE */
+        .container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            max-width: 600px;
+            padding: 30px 15px 30px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* HERO HEADER */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #facc15 0%, #38bdf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.35);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .subtitle-container {
+            min-height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .typewriter {
+            font-size: 0.95rem;
+            color: #fde047;
+            border-right: 2px solid #facc15;
+            white-space: normal;
+            letter-spacing: 0.5px;
+            animation: blinkCursor 0.75s step-end infinite;
+            font-style: italic;
+            font-family: 'Segoe UI', sans-serif;
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+            text-align: center;
+        }
+
+        /* CORALINE GLASSMORPHISM CARD */
+        .card {
+            background: rgba(10, 15, 30, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(250, 204, 21, 0.35);
+            border-radius: 20px;
+            padding: 25px 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 
+                        inset 0 0 15px rgba(250, 204, 21, 0.08);
+            margin-bottom: 25px;
+            width: 100%;
+            animation: fadeInUp 1.8s ease-out;
+            position: relative;
+        }
+
+        .card::before {
+            content: '🗝️';
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .card::after {
+            content: '🧵';
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .card p {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.98rem;
+            line-height: 1.65;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+            font-weight: 300;
+            text-align: left;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* INTERACTIVE BUTTONS SECTION */
+        .interactive-section {
+            margin-top: 25px;
+            text-align: center;
+            border-top: 1px dashed rgba(250, 204, 21, 0.3);
+            padding-top: 20px;
+        }
+
+        .question-title {
+            font-size: 1.05rem;
+            color: #facc15;
+            font-weight: 600;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        .btn-container {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            min-height: 55px;
+            width: 100%;
+        }
+
+        .btn-action {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: 'Segoe UI', sans-serif;
+            border-radius: 25px;
+            cursor: pointer;
+            border: 2px solid #facc15;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            touch-action: manipulation;
+        }
+
+        .btn-sim {
+            background-color: #4b0082;
+            color: #facc15;
+            z-index: 2;
+        }
+
+        .btn-sim:active {
+            transform: scale(0.95);
+            background-color: #6a0dad;
+        }
+
+        .btn-nao {
+            background-color: #1e293b;
+            color: #94a3b8;
+            border-color: #475569;
+            position: relative;
+            z-index: 2;
+            transition: all 0.15s ease-out;
+        }
+
+        /* VIDEO BUTTON SECTION */
+        .video-section {
+            width: 100%;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .btn-video {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+            color: #0d1117;
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+            border: 1px solid rgba(250, 204, 21, 0.8);
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(250, 204, 21, 0.3);
+            box-sizing: border-box;
+        }
+
+        /* SPOTIFY CONTAINER */
+        .spotify-section {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .spotify-card {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            padding: 4px;
+        }
+
+        .spotify-card iframe {
+            border-radius: 12px;
+            width: 100%;
+            height: 352px;
+            border: none;
+        }
+
+        /* FOOTER */
+        footer {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            padding: 18px 15px;
+            text-align: center;
+            background: rgba(6, 7, 19, 0.9);
+            border-top: 1px solid rgba(250, 204, 21, 0.2);
+        }
+
+        footer p {
+            font-size: 0.88rem;
+            color: #94a3b8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        footer span {
+            color: #facc15;
+        }
+
+        /* ANIMATIONS */
+        @keyframes moonGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 253, 240, 0.35); }
+            100% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.35); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes blinkCursor {
+            from, to { border-color: transparent; }
+            50% { border-color: #facc15; }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <audio id="musicaFundo" loop preload="auto">
+        <source src="exploration.mp3" type="audio/mpeg">
+    </audio>
+
+    <canvas id="bg-canvas"></canvas>
+    
+    <div class="moon-container"></div>
+    <div class="forest-silhouette"></div>
+
+    <div class="container">
+        <header>
+            <h1>¡Feliz Cumpleaños, Mi Amor! ❤️</h1>
+            <div class="subtitle-container">
+                <span id="typewriter" class="typewriter"></span>
+            </div>
+        </header>
+
+        <section class="card">
+            <p>Hola, mi amor. ❤️</p>
+            <p>Conocerte ha sido la mejor cosa que me ha pasado en la vida. Nunca voy a olvidar la primera vez que te vi. En ese momento pensé para mí mismo: "Algún día quiero estar con ella."</p>
+            <p>Con el tiempo, ese día llegó. Nos fuimos acercando poco a poco y, desde entonces, hemos estado juntos compartiendo momentos inolvidables.</p>
+            <p>Hoy, en tu cumpleaños, quiero que sepas lo especial que eres para mí. Gracias por tu cariño, por tu compañía y por hacer mi vida mucho más feliz.</p>
+            <p>Espero que este nuevo año de vida esté lleno de alegría, salud, sueños cumplidos y mucho amor.</p>
+            <p>Siempre estaré a tu lado para apoyarte, cuidarte y seguir construyendo nuestra historia juntos.</p>
+            <p>Espero que te guste este pequeño detalle. Lo hice con todo mi cariño para ti.</p>
+            <p>También espero que te guste este pequeño ramo de girasoles. 🌻 Sé cuánto te gustan y quise regalártelos como un símbolo de la alegría y la luz que traes a mi vida.</p>
+            <p>Y, por cierto... ¿Recuerdas que me dijiste que en tu próximo cumpleaños saldrías conmigo? Bueno... ese día por fin llegó. ❤️ Espero que podamos crear muchos recuerdos bonitos juntos y seguir escribiendo nuestra historia.</p>
+
+            <div class="interactive-section">
+                <p class="question-title">¿Aceptas abrir la pequeña puerta conmigo hoy? 🗝️✨</p>
+                <div class="btn-container">
+                    <button class="btn-action btn-sim" onclick="respostaSim()">¡SÍ! ❤️</button>
+                    <button class="btn-action btn-nao" id="btnNao" onclick="desviar()" onmouseover="desviar()" ontouchstart="desviar(event)">NO</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="video-section">
+            <a href="https://www.instagram.com/reel/DbOpWbKi3Ri/?igsh=MXhlOG81eGs0aWlyMw==" target="_blank" rel="noopener noreferrer" class="btn-video">
+                🎥 Mira este video ❤️
+            </a>
+        </section>
+
+        <section class="spotify-section">
+            <div class="spotify-card">
+                <iframe src="https://open.spotify.com/embed/playlist/2u7hAgL7NegOZq3F2k0Ehm?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>A través de la pequeña puerta y más allá de las estrellas... <span>🗝️ 🧵 ❤️</span></p>
+    </footer>
+
+    <script>
+        // TYPEWRITER EFFECT
+        const textToType = "Detrás de la puerta secreta, un regalo hecho especialmente para ti... 🗝️✨";
+        const typewriterElement = document.getElementById("typewriter");
+        let charIndex = 0;
+
+        function typeEffect() {
+            if (charIndex < textToType.length) {
+                typewriterElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 50);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(typeEffect, 600);
+        });
+
+        // BOTÃO FUJÃO ADAPTADO PARA TOUCH NO CELULAR
+        function desviar(e) {
+            if (e && e.type === 'touchstart') e.preventDefault();
+            const btn = document.getElementById("btnNao");
+
+            const larguraJanela = window.innerWidth - btn.offsetWidth - 20;
+            const alturaJanela = window.innerHeight - btn.offsetHeight - 20;
+
+            const novaPosicaoX = Math.max(10, Math.floor(Math.random() * larguraJanela));
+            const novaPosicaoY = Math.max(10, Math.floor(Math.random() * alturaJanela));
+
+            btn.style.position = "fixed";
+            btn.style.left = `${novaPosicaoX}px`;
+            btn.style.top = `${novaPosicaoY}px`;
+        }
+
+        // RESPOSTA DO BOTÃO SIM
+        function respostaSim() {
+            const audio = document.getElementById("musicaFundo");
+            if (audio) {
+                audio.volume = 0.7;
+                audio.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
+            }
+
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            setTimeout(() => {
+                const meuNumero = "5592994205721";
+                const mensagem = encodeURIComponent("¡SÍ! Acepto abrir la pequeña puerta contigo hoy... 🗝️❤️");
+                window.location.href = `https://wa.me/${meuNumero}?text=${mensagem}`;
+            }, 2500);
+        }
+
+        // CANVAS BACKGROUND ANIMATION
+        const canvas = document.getElementById("bg-canvas");
+        const ctx = canvas.getContext("2d");
+
+        let width, height;
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height * 0.8;
+                this.size = Math.random() * 1.2 + 0.4;
+                this.alpha = Math.random();
+                this.speed = Math.random() * 0.015 + 0.005;
+                this.increasing = Math.random() > 0.5;
+            }
+            update() {
+                if (this.increasing) {
+                    this.alpha += this.speed;
+                    if (this.alpha >= 1) this.increasing = false;
+                } else {
+                    this.alpha -= this.speed;
+                    if (this.alpha <= 0.15) this.increasing = true;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        class Firefly {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 1;
+                this.alpha = Math.random() * 0.5 + 0.2;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.color = Math.random() > 0.4 ? "#facc15" : "#38bdf8";
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const stars = Array.from({ length: 45 }, () => new Star());
+        const fireflies = Array.from({ length: 15 }, () => new Firefly());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            stars.forEach(s => { s.update(); s.draw(); });
+            fireflies.forEach(ff => { ff.update(); ff.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
